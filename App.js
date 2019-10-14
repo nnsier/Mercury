@@ -3,6 +3,14 @@ import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 
 import JogNavigator from './navigation/JogNavigator';
+import {init} from './helpers/db';
+
+init().then(() => {
+    console.log('Initialized database');
+  }).catch(err => {
+    console.log('Initializing database failed');
+    console.log(err);
+  })
 
 const fetchFonts = () => {
   return Font.loadAsync({

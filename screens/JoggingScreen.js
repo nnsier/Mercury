@@ -1,18 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
+import {insertJog} from '../helpers/db';
 import HeaderButton from '../components/UI/HeaderButton';
 
+
+
 const JoggingScreen = props => {
+  const finishJog = (distance, time) => {
+    const now = Date.now();
+    // const now = dateObj.now();
+    console.log(now);
+    insertJog(distance, time, now).then((result)=>{console.log(JSON.stringify(result))}).catch((err) => {console.log(err)})
+  }
+
   return (
     <View style={styles.screen}>
       <Text>Start a jog</Text>
       <Text>Time will be here.</Text>
       <View style={styles.buttonRow}>
-        <Button title="Start" onPress={() => { }} />
-        <Button title="Stop" onPress={() => { }} />
-        <Button title="Submit" onPress={() => { }} />
+        <Button title="Start" onPress={() => {console.log('start') }} />
+        <Button title="Stop" onPress={() => { console.log('stop')}} />
+        <Button title="Finish" onPress={() => {finishJog('12', '50:20:30')}} />
       </View>
     </View>
   );
