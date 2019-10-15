@@ -5,14 +5,28 @@ const db = SQLite.openDatabase("mercury.db");
 export const init = async () => {
     try {
     await db.exec([{sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () => console.log('Foreign keys turned on'))
-    await initJogTable();
-    await initIntervalTable();
+    await initJogsTable();
+    await initIntervalsTable();
     } catch (error){
         console.log(error);
     }
 }
 
-export const initJogTable = () => {
+export const dropTables = async () => {
+    try {
+        await db.exec([{sql: 'PRAGMA foreign_keys = OFF;', args: [] }], false, () => console.log('Foreign keys turned off'));
+        await dropJogsTable();
+        await updateIntervals();
+        await dropIntervalsTable();
+        await init();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+export const initJogsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -30,7 +44,7 @@ export const initJogTable = () => {
   return promise;
 };
 
-export const initIntervalTable = () => {
+export const initIntervalsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -48,12 +62,66 @@ export const initIntervalTable = () => {
   return promise;
 };
 
+export const dropJogsTable = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                "DROP TABLE IF EXISTS jogs",
+                [],
+                (_, result) => {
+                    resolve(result);
+                },
+                (_, err) => {
+                    reject(err)
+                }
+            )
+        })
+    })
+    return promise;
+}
+
+export const dropIntervalsTable = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                "DROP TABLE IF EXISTS intervals",
+                [],
+                (_, result) => {
+                    resolve(result);
+                },
+                (_, err) => {
+                    reject(err)
+                }
+            )
+        })
+    })
+    return promise;
+}
+
+const updateIntervals = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+          tx.executeSql(
+            "UPDATE intervals SET jogs_reference = NULL",
+            [],
+            (_, result) => {
+              resolve(result);
+            },
+            (_, err) => {
+              reject(err);
+            }
+          );
+        });
+      });
+      return promise;
+}
+
 export const insertJog = (distance, duration, date) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "INSERT INTO jogs (distance, time, date) VALUES (?, ?, ?)",
-        [distance, time, date],
+        "INSERT INTO jogs (distance, duration, date) VALUES (?, ?, ?)",
+        [distance, duration, date],
         (_, result) => {
           resolve(result);
         },
@@ -66,11 +134,29 @@ export const insertJog = (distance, duration, date) => {
   return promise;
 };
 
+export const insertIntervals = (distance, duration, date) => {
+    const promise = new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "INSERT INTO intervals (latitude, longitude, time, jogs_reference) VALUES (?, ?, ?, ?)",
+          [distance, duration, date],
+          (_, result) => {
+            resolve(result);
+          },
+          (_, err) => {
+            reject(err);
+          }
+        );
+      });
+    });
+    return promise;
+  };
+
 export const getJogs = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM jogs",
+        "SELECT * FROM jogs LEFT JOIN intervals ON intervals.jogs_reference = jogs.id",
         [],
         (_, result) => {
           resolve(result);

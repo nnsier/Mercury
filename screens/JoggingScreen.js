@@ -2,14 +2,14 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-import {insertJog, getJogs} from '../helpers/db';
+import {insertJog, getJogs, dropTables} from '../helpers/db';
 
 import HeaderButton from '../components/UI/HeaderButton';
 
 
 
 const JoggingScreen = props => {
-  const finishJog = (distance, time) => {
+  const finishJog = (distance, duration) => {
     const now = Date.now();
     // const now = dateObj.now();
     console.log(now);
@@ -27,6 +27,7 @@ const JoggingScreen = props => {
         <Button title="Start" onPress={() => grabJogs()} />
         <Button title="Stop" onPress={() => { console.log('stop')}} />
         <Button title="Finish" onPress={() => {finishJog('12', '50:20:30')}} />
+        <Button title= "DROP ALL TABLES" onPress={dropTables} />
       </View>
     </View>
   );
