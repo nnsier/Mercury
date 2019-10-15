@@ -49,7 +49,7 @@ JoggingScreen.navigationOptions = navData => {
     headerRight: (<HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title='Jogging Overview'
-        iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+        iconName={Platform.OS === 'android' ? 'md-flash' : 'ios-flash'}
         onPress={() => {
           navData.navigation.navigate('JogOverview')
         }}
