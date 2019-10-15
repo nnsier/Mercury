@@ -134,12 +134,12 @@ export const insertJog = (distance, duration, date) => {
   return promise;
 };
 
-export const insertIntervals = (distance, duration, date) => {
+export const insertInterval = (latitude, longitude, time, jogs_reference) => {
     const promise = new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
           "INSERT INTO intervals (latitude, longitude, time, jogs_reference) VALUES (?, ?, ?, ?)",
-          [distance, duration, date],
+          [latitude, longitude, time, jogs_reference],
           (_, result) => {
             resolve(result);
           },
@@ -156,7 +156,7 @@ export const getJogs = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM jogs LEFT JOIN intervals ON intervals.jogs_reference = jogs.id",
+        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_reference = jogs.id",
         [],
         (_, result) => {
           resolve(result);
@@ -169,3 +169,21 @@ export const getJogs = () => {
   });
   return promise;
 };
+
+export const getIntervals = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+          tx.executeSql(
+            "SELECT * FROM intervals",
+            [],
+            (_, result) => {
+              resolve(result);
+            },
+            (_, err) => {
+              reject(err);
+            }
+          );
+        });
+      });
+      return promise;
+}
