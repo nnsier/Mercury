@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 // import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector, useDispatch } from 'react-redux';
 
+import JogItem from '../components/Jog/JogItem';
+import * as jogsActions from '../store/actions/jog-actions';
 import HeaderButton from '../components/UI/HeaderButton';
 
 const JogOverviewScreen = props => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(jogsActions.loadJogs());
+  }, [dispatch])
   return (
     <View style={styles.screen}>
       <Text>View your jogs</Text>

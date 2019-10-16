@@ -1,14 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
 
+import * as jogsActions from '../store/actions/jog-actions';
 import {insertJog, insertInterval, getJogs, getIntervals, dropTables} from '../helpers/db';
 
 import HeaderButton from '../components/UI/HeaderButton';
 
 
 
+
 const JoggingScreen = props => {
+  const [distanceValue, setDistanceValue] = useState(0);
+
+  const saveJogHandler = () => {
+    dispatchEvent(jogsActions.addJog(distanceValue))
+  }
   const finishJog = (distance, duration) => {
     const now = Date.now();
     insertJog(distance, duration, now).then((result)=>{console.log(JSON.stringify(result))}).catch((err) => {console.log(err)})

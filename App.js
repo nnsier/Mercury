@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 
 import JogNavigator from './navigation/JogNavigator';
 import {init} from './helpers/db';
+
+import jogsReducer from './store/reducers/jog-reducers';
+import intervalsReducer from './store/reducers/interval-reducers';
+const rootReducer =  combineReducers({
+  jogs: jogsReducer,
+  intervals: intervalsReducer
+})
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 init().then(() => {
     console.log('Initialized database');
@@ -32,6 +43,6 @@ export default function App() {
   }
 
   return (
-    <JogNavigator />
+    <Provider store={store}><JogNavigator /></Provider>
   );
 }
