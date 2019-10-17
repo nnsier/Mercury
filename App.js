@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 import JogNavigator from './navigation/JogNavigator';
 import {init} from './helpers/db';

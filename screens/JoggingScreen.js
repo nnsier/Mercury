@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
+import * as Location from 'expo-location';
 
 import * as jogsActions from '../store/actions/jog-actions';
 import {insertJog, insertInterval, getJogs, getIntervals, dropTables} from '../helpers/db';
