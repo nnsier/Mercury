@@ -20,8 +20,6 @@ export const loadJogs = () => {
     return async dispatch => {
         try {
             const dbResult = await fetchJogs();
-            // console.log(dbResult);
-            // console.log(dbResult.rows._array);
             dispatch({ type: SET_JOGS, jogs: dbResult.rows._array })
         } catch (err) {
             throw err;

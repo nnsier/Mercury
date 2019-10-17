@@ -11,7 +11,6 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case SET_JOGS:
-            // console.log(action.jogs);
             return {
                 jogs: action.jogs
             }

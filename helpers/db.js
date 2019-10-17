@@ -3,28 +3,32 @@ import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("mercury.db");
 
 export const init = async () => {
-    try {
-    await db.exec([{sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () => console.log('Foreign keys turned on'))
+  try {
+    await db.exec([{ sql: "PRAGMA foreign_keys = ON;", args: [] }], false, () =>
+      console.log("Foreign keys turned on")
+    );
     await initJogsTable();
     await initIntervalsTable();
-    } catch (error){
-        console.log(error);
-    }
-}
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const dropTables = async () => {
-    try {
-        await db.exec([{sql: 'PRAGMA foreign_keys = OFF;', args: [] }], false, () => console.log('Foreign keys turned off'));
-        await dropJogsTable();
-        await updateIntervals();
-        await dropIntervalsTable();
-        await init();
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-
+  try {
+    await db.exec(
+      [{ sql: "PRAGMA foreign_keys = OFF;", args: [] }],
+      false,
+      () => console.log("Foreign keys turned off")
+    );
+    await dropJogsTable();
+    await updateIntervals();
+    await dropIntervalsTable();
+    await init();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const initJogsTable = () => {
   const promise = new Promise((resolve, reject) => {
@@ -63,58 +67,58 @@ export const initIntervalsTable = () => {
 };
 
 export const dropJogsTable = () => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql(
-                "DROP TABLE IF EXISTS jogs",
-                [],
-                (_, result) => {
-                    resolve(result);
-                },
-                (_, err) => {
-                    reject(err)
-                }
-            )
-        })
-    })
-    return promise;
-}
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "DROP TABLE IF EXISTS jogs",
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
 
 export const dropIntervalsTable = () => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql(
-                "DROP TABLE IF EXISTS intervals",
-                [],
-                (_, result) => {
-                    resolve(result);
-                },
-                (_, err) => {
-                    reject(err)
-                }
-            )
-        })
-    })
-    return promise;
-}
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "DROP TABLE IF EXISTS intervals",
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
 
 const updateIntervals = () => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
-          tx.executeSql(
-            "UPDATE intervals SET jogs_reference = NULL",
-            [],
-            (_, result) => {
-              resolve(result);
-            },
-            (_, err) => {
-              reject(err);
-            }
-          );
-        });
-      });
-      return promise;
-}
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "UPDATE intervals SET jogs_reference = NULL",
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
 
 export const insertJog = (distance, duration, date) => {
   const promise = new Promise((resolve, reject) => {
@@ -135,22 +139,22 @@ export const insertJog = (distance, duration, date) => {
 };
 
 export const insertInterval = (latitude, longitude, time, jogs_reference) => {
-    const promise = new Promise((resolve, reject) => {
-      db.transaction(tx => {
-        tx.executeSql(
-          "INSERT INTO intervals (latitude, longitude, time, jogs_reference) VALUES (?, ?, ?, ?)",
-          [latitude, longitude, time, jogs_reference],
-          (_, result) => {
-            resolve(result);
-          },
-          (_, err) => {
-            reject(err);
-          }
-        );
-      });
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "INSERT INTO intervals (latitude, longitude, time, jogs_reference) VALUES (?, ?, ?, ?)",
+        [latitude, longitude, time, jogs_reference],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
     });
-    return promise;
-  };
+  });
+  return promise;
+};
 
 export const getJogs = () => {
   const promise = new Promise((resolve, reject) => {
@@ -182,26 +186,27 @@ export const fetchJogs = () => {
         (_, err) => {
           reject(err);
         }
-      )
-    })
-  })
+      );
+    });
+  });
   return promise;
-}
+};
 
-export const fetchIntervals = (jogId) => {
-    const promise = new Promise((resolve, reject) => {
-      console.log(jogId);
-        db.transaction(tx => {
-          tx.executeSql(
-            "SELECT * FROM intervals WHERE jogs_reference = ?",[jogId],
-            (_, result) => {
-              resolve(result);
-            },
-            (_, err) => {
-              reject(err);
-            }
-          );
-        });
-      });
-      return promise;
-}
+export const fetchIntervals = jogId => {
+  const promise = new Promise((resolve, reject) => {
+    console.log(jogId);
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_reference = ?",
+        [jogId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
