@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import JoggingScreen from '../screens/JoggingScreen';
 import JogOverviewScreen from '../screens/JogOverviewScreen';
+import JogDetailScreen from '../screens/JogDetailScreen';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -26,6 +27,7 @@ const defaultNavOptions = {
 const JogNavigator = createStackNavigator({
   Jogging: JoggingScreen,
   JogOverview: JogOverviewScreen,
+  JogDetail: JogDetailScreen,
 }, {
   defaultNavigationOptions: defaultNavOptions
 })

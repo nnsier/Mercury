@@ -170,12 +170,30 @@ export const getJogs = () => {
   return promise;
 };
 
-export const getIntervals = () => {
+export const fetchJogs = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM JOGS ORDER BY id DESC",
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      )
+    })
+  })
+  return promise;
+}
+
+export const fetchIntervals = (jogId) => {
     const promise = new Promise((resolve, reject) => {
+      console.log(jogId);
         db.transaction(tx => {
           tx.executeSql(
-            "SELECT * FROM intervals",
-            [],
+            "SELECT * FROM intervals WHERE jogs_reference = ?",[jogId],
             (_, result) => {
               resolve(result);
             },

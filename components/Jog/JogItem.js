@@ -4,14 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 const JogItem = props => {
   return (
     <TouchableOpacity
-      onPress={() => {
-        console.log("We've selected");
-      }}
+      onPress={props.onSelect}
       style={styles.jogItem}
-    >
-        <Text>DISTANCE</Text>
-        <Text>DURATION</Text>
-        <Text>DATE</Text>
+    ><View>
+        <Text>"DISTANCE"</Text>
+        <Text>"DURATION"</Text>
+        <Text>"DATE"</Text>
+        </View>
     </TouchableOpacity>
   );
 };

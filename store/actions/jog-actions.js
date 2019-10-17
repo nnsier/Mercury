@@ -1,6 +1,7 @@
-import { getJogs } from '../../helpers/db';
+import { fetchJogs } from '../../helpers/db';
 
 export const ADD_JOG = "ADD_JOG";
+export const SET_JOGS = "SET_JOGS";
 
 export const addJog = (duration, date, distance) => {
   return {
@@ -13,11 +14,15 @@ export const addJog = (duration, date, distance) => {
   };
 };
 
+//Something is probably incorrect with how we're grabbing the dbResult
+
 export const loadJogs = () => {
     return async dispatch => {
         try {
-            const dbResult = await getJogs();
-            console.log(dbResult);
+            const dbResult = await fetchJogs();
+            // console.log(dbResult);
+            // console.log(dbResult.rows._array);
+            dispatch({ type: SET_JOGS, jogs: dbResult.rows._array })
         } catch (err) {
             throw err;
         }
