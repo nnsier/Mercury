@@ -7,6 +7,9 @@ import * as intervalsActions from '../store/actions/interval-actions';
 const JogDetailScreen = props => {
     const jogId = props.navigation.getParam('jogId');
     const intervals = useSelector(state => state.intervals.intervals);
+    //const selectedJog = useSelector(state => state.jogs.jogs.find(jog.id === jogId));
+    //gotta create models for that to work, I think.
+    // console.log(selectedJog);
     console.log(intervals);
     const dispatch = useDispatch();
 

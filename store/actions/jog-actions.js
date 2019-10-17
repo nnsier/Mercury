@@ -1,15 +1,16 @@
-import { fetchJogs } from '../../helpers/db';
+import { fetchJogs, insertJog } from '../../helpers/db';
 
 export const ADD_JOG = "ADD_JOG";
 export const SET_JOGS = "SET_JOGS";
 
 export const addJog = (duration, date, distance) => {
-  return {
-    type: ADD_JOG,
-    jogData: {
-      duration,
-      date,
-      distance
+  return async dispatch => {
+    try {
+        const dbResult = await insertJog(duration, date, distance);
+        console.log(dbResult);
+        dispatch({ type: ADD_JOG, jogData: {id: dbResult.insertId, duration, date, distance}})
+    } catch (err) {
+        throw err
     }
   };
 };

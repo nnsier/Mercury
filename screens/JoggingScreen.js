@@ -12,11 +12,9 @@ import HeaderButton from '../components/UI/HeaderButton';
 
 
 const JoggingScreen = props => {
+  const dispatch = useDispatch()
   const [distanceValue, setDistanceValue] = useState(0);
 
-  const saveJogHandler = () => {
-    dispatchEvent(jogsActions.addJog(distanceValue))
-  }
   const finishJog = (distance, duration) => {
     const now = Date.now();
     insertJog(distance, duration, now).then((result)=>{console.log(JSON.stringify(result))}).catch((err) => {console.log(err)})
@@ -35,6 +33,10 @@ const JoggingScreen = props => {
     getIntervals().then(result => {console.log(JSON.stringify(result))}).catch(err => {console.log(err)})
   }
 
+  const saveJogHandler = () => {
+    dispatch(jogsActions.addJog(Math.random(), Date.now(), Math.random()))
+  }
+
   return (
     <View style={styles.screen}>
       <Text>Start a jog</Text>
@@ -42,7 +44,7 @@ const JoggingScreen = props => {
       <View style={styles.buttonRow}>
         <Button title="Grab jogs" onPress={() => grabJogs()} />
         <Button title="Stop" onPress={() => { console.log('stop')}} />
-        <Button title="Finish" onPress={() => {finishJog('12', '50:20:30')}} />
+        <Button title="Save Jog" onPress={saveJogHandler} />
         <Button title= "DROP ALL TABLES" onPress={dropTables} />
         <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
         <Button title="Grab int" onPress={grabIntervals} />
