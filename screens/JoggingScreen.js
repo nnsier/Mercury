@@ -11,33 +11,7 @@ import Stopwatch from '../components/Stopwatch/Stopwatch';
 
 
 const JoggingScreen = props => {
-  // const [locations, setLocations] = useState([]);
-  // const [time, setTime] = useState(0);
-  // let nIntervId;
-  // const dispatch = useDispatch()
-  // const [distanceValue, setDistanceValue] = useState(0);
-
-  // const fetchLocations = async () => {
-    
-  //   console.log('in');
-  //   const fetchLocation = async () => {
-  //     let newLocation =  await Location.getCurrentPositionAsync();
-  //     setLocations([...locations, newLocation]);
-  //     setTime(newLocation.timestamp);
-  //     console.log(newLocation.timestamp);
-  //   }
-  //   nIntervId = setInterval(fetchLocation,1);
-  // }
-
-  // const stopTimerHandler = () => {
-  //   clearInterval(nIntervId);
-  // }
-
-  // const finishJog = (distance, duration) => {
-  //   const now = Date.now();
-  //   insertJog(distance, duration, now).then((result)=>{console.log(JSON.stringify(result))}).catch((err) => {console.log(err)})
-  // }
-
+  
   const grabJogs = () => {
     getJogs().then(result => {console.log(JSON.stringify(result))}).catch(err => {console.log(err)})
   }
@@ -58,12 +32,8 @@ const JoggingScreen = props => {
   return (
     <View style={styles.screen}>
       <Text>Start a jog</Text>
-      {/* <Text style={styles.clock}>{time}</Text> */}
       <View style={styles.buttonRow}>
         <Button title="Grab jogs" onPress={() => grabJogs()} />
-        {/* <Button title="Start" onPress={fetchLocations} />
-        <Button title="Stop" onPress={stopTimerHandler} />
-        <Button title="Save Jog" onPress={saveJogHandler} /> */}
         <Button title= "DROP ALL TABLES" onPress={dropTables} />
         <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
         <Button title="Grab int" onPress={grabIntervals} />
@@ -98,10 +68,6 @@ const styles = StyleSheet.create({
   clock: {
     fontSize: 40,
   },
-  buttonRow: {
-    // flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
 })
 
 export default JoggingScreen;

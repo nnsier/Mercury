@@ -63,10 +63,11 @@ const Stopwatch = () => {
 
             <Text>{runningTime}</Text>
             <Text>{hours}:{minutes}:{seconds}:{milliseconds}</Text>
-            <View style={styles.buttonRow}></View>
-            <Button title="Start" onPress={handleClick}/>
-            <Button title="Pause" />
-            <Button title="Stop" />
+            <View style={styles.buttonRow}>
+                <Button title="Start" onPress={handleClick}/>
+                <Button title="Pause" />
+                <Button title="Stop" />
+            </View>
         </View>
     )
 }
@@ -74,6 +75,7 @@ const Stopwatch = () => {
 const styles = StyleSheet.create({
     buttonRow: {
         flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 })
 
