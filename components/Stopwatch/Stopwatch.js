@@ -11,7 +11,9 @@ const Stopwatch = () => {
 
     const getLocation = async () => {
         let newLocation = await Location.getCurrentPositionAsync();
-        // console.log(newLocation);
+        let {timestamp} = newLocation;
+        let {latitude, longitude, speed} = newLocation.coords;
+        setLocations([...locations, {latitude, longitude, speed, timestamp}])
     }
 
 
@@ -28,9 +30,7 @@ const Stopwatch = () => {
 
     handleClick = () => {
         if(status) {
-            console.log(timerInterval);
             clearInterval(timerInterval);
-            console.log(distanceInterval);
             clearInterval(distanceInterval);
         } else {
             startTimer()
@@ -60,13 +60,13 @@ const Stopwatch = () => {
     
     return(
         <View>
-
-            <Text>{runningTime}</Text>
-            <Text>{hours}:{minutes}:{seconds}:{milliseconds}</Text>
+            <Text style={styles.clock}>{hours}:{minutes}:{seconds}:{milliseconds}</Text>
             <View style={styles.buttonRow}>
-                <Button title="Start" onPress={handleClick}/>
-                <Button title="Pause" />
-                <Button title="Stop" />
+                {!status 
+                ? <Button title="Start" onPress={handleClick}/>
+                : <Button title="Pause" onPress={handleClick}/>
+                }
+                <Button title="Complete" />
             </View>
         </View>
     )
@@ -76,6 +76,9 @@ const styles = StyleSheet.create({
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    clock: {
+        fontSize: 24,
     }
 })
 
