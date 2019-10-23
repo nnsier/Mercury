@@ -2,20 +2,35 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
-
-
+import * as Location from 'expo-location';
 import * as jogsActions from '../store/actions/jog-actions';
 import {insertJog, insertInterval, getJogs, getIntervals, dropTables} from '../helpers/db';
 
 import HeaderButton from '../components/UI/HeaderButton';
 
 
-
-
 const JoggingScreen = props => {
-  
+  const [locations, setLocations] = useState([]);
+  const [time, setTime] = useState(0);
+  let nIntervId;
   const dispatch = useDispatch()
   const [distanceValue, setDistanceValue] = useState(0);
+
+  const fetchLocations = async () => {
+    
+    console.log('in');
+    const fetchLocation = async () => {
+      let newLocation =  await Location.getCurrentPositionAsync();
+      setLocations([...locations, newLocation]);
+      setTime(newLocation.timestamp);
+      console.log(newLocation.timestamp);
+    }
+    nIntervId = setInterval(fetchLocation,1);
+  }
+
+  const stopTimerHandler = () => {
+    clearInterval(nIntervId);
+  }
 
   const finishJog = (distance, duration) => {
     const now = Date.now();
@@ -42,10 +57,11 @@ const JoggingScreen = props => {
   return (
     <View style={styles.screen}>
       <Text>Start a jog</Text>
-      <Text>Time will be here.</Text>
+      <Text style={styles.clock}>{time}</Text>
       <View style={styles.buttonRow}>
         <Button title="Grab jogs" onPress={() => grabJogs()} />
-        <Button title="Stop" onPress={() => { console.log('stop')}} />
+        <Button title="Start" onPress={fetchLocations} />
+        <Button title="Stop" onPress={stopTimerHandler} />
         <Button title="Save Jog" onPress={saveJogHandler} />
         <Button title= "DROP ALL TABLES" onPress={dropTables} />
         <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
@@ -76,6 +92,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: 'center'
+  },
+  clock: {
+    fontSize: 40,
   },
   buttonRow: {
     // flexDirection: 'row',
