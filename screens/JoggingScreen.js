@@ -38,10 +38,6 @@ const JoggingScreen = props => {
     <Text>Start a jog</Text>
     <View style={styles.buttonRow}>
               <Stopwatch />
-      <Button title="Grab jogs" onPress={() => grabJogs()} />
-      <Button title= "DROP ALL TABLES" onPress={dropTables} />
-      <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
-      <Button title="Grab int" onPress={grabIntervals} />
 
     </View>
   </View>

@@ -12,8 +12,7 @@ const Stopwatch = () => {
     [timerInterval, setTimerInterval] = useState(null);
     [distanceInterval, setDistanceInterval] = useState(null);
     const dispatch = useDispatch();
-    const jogs = useSelector(state => state.jogs.jogs);
-    console.log(jogs);
+    
 
     const getLocation = async () => {
         let newLocation = await Location.getCurrentPositionAsync();
