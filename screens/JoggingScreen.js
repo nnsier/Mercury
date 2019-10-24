@@ -11,7 +11,11 @@ import Stopwatch from '../components/Stopwatch/Stopwatch';
 
 
 const JoggingScreen = props => {
+  const dispatch = useDispatch();
   
+  useEffect(()=> {
+    dispatch(jogsActions.loadJogs())
+  }, [dispatch])
   const grabJogs = () => {
     getJogs().then(result => {console.log(JSON.stringify(result))}).catch(err => {console.log(err)})
   }
@@ -31,16 +35,16 @@ const JoggingScreen = props => {
 
   return (
     <View style={styles.screen}>
-      <Text>Start a jog</Text>
-      <View style={styles.buttonRow}>
-      <Stopwatch />
-        <Button title="Grab jogs" onPress={() => grabJogs()} />
-        <Button title= "DROP ALL TABLES" onPress={dropTables} />
-        <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
-        <Button title="Grab int" onPress={grabIntervals} />
+    <Text>Start a jog</Text>
+    <View style={styles.buttonRow}>
+              <Stopwatch />
+      <Button title="Grab jogs" onPress={() => grabJogs()} />
+      <Button title= "DROP ALL TABLES" onPress={dropTables} />
+      <Button title="Add Interval" onPress={()=> addInterval(13.2, 14.3, 2)} />
+      <Button title="Grab int" onPress={grabIntervals} />
 
-      </View>
     </View>
+  </View>
   );
 };
 
@@ -69,6 +73,10 @@ const styles = StyleSheet.create({
   clock: {
     fontSize: 40,
   },
+  buttonRow: {
+    // flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 })
 
 export default JoggingScreen;

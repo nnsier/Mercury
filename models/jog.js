@@ -1,5 +1,5 @@
 class Jog {
-    constructor(id, distance, duration, date, intervals){
+    constructor(id, distance, duration, date){
         this.id = id;
         this.distance = distance,
         this.duration= duration,

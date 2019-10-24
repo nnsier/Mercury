@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
+
+import * as JogActions from '../../store/actions/jog-actions';
 
 const Stopwatch = () => {
     [status, setStatus] = useState(false);
@@ -8,6 +11,9 @@ const Stopwatch = () => {
     [locations, setLocations] = useState([]);
     [timerInterval, setTimerInterval] = useState(null);
     [distanceInterval, setDistanceInterval] = useState(null);
+    const dispatch = useDispatch();
+    const jogs = useSelector(state => state.jogs.jogs);
+    console.log(jogs);
 
     const getLocation = async () => {
         let newLocation = await Location.getCurrentPositionAsync();
@@ -25,7 +31,7 @@ const Stopwatch = () => {
         setDistanceInterval(distanceCheck = setInterval(()=> {
             console.log(runningTime);
             getLocation()
-        }, 1000))
+        }, 5000))
     }
 
     handleClick = () => {
@@ -37,6 +43,7 @@ const Stopwatch = () => {
         }
         setStatus(!status)
         console.log(status);
+        console.log(locations)
     }
 
     useEffect(() => {
@@ -66,7 +73,7 @@ const Stopwatch = () => {
                 ? <Button title="Start" onPress={handleClick}/>
                 : <Button title="Pause" onPress={handleClick}/>
                 }
-                <Button title="Complete" />
+                <Button title="Complete" onPress={()=> {dispatch(JogActions.addJog(12, Date.now(), 1))}}/>
             </View>
         </View>
     )

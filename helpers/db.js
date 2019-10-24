@@ -52,7 +52,7 @@ export const initIntervalsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, time INTEGER NOT NULL, jogs_reference INTEGER, FOREIGN KEY (jogs_reference) REFERENCES jogs(id));",
+        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_reference INTEGER, FOREIGN KEY (jogs_reference) REFERENCES jogs(id));",
         [],
         () => {
           resolve();
@@ -138,12 +138,12 @@ export const insertJog = (distance, duration, date) => {
   return promise;
 };
 
-export const insertInterval = (latitude, longitude, time, jogs_reference) => {
+export const insertInterval = (latitude, longitude, timestamp, jogs_reference) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "INSERT INTO intervals (latitude, longitude, time, jogs_reference) VALUES (?, ?, ?, ?)",
-        [latitude, longitude, time, jogs_reference],
+        "INSERT INTO intervals (latitude, longitude, timestamp, jogs_reference) VALUES (?, ?, ?, ?)",
+        [latitude, longitude, timestamp, jogs_reference],
         (_, result) => {
           resolve(result);
         },

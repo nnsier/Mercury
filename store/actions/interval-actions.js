@@ -3,13 +3,13 @@ import { fetchIntervals } from '../../helpers/db';
 export const ADD_INTERVAL = "ADD_INTERVAL";
 export const SET_INTERVALS = "SET_INTERVALS"
 
-export const addInterval = (latitude, longitude, time, jogs_referenceId) => {
+export const addInterval = (latitude, longitude, timestamp, jogs_referenceId) => {
   return {
     type: ADD_INTERVAL,
     intervalData: {
       latitude,
       longitude,
-      time,
+      timestamp,
       jogs_referenceId
     }
   };

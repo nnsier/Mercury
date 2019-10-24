@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createStore, combineReducers, applyMiddleware } from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from "react-redux";
 import ReduxThunk from "redux-thunk";
 import * as Font from "expo-font";
@@ -18,7 +19,7 @@ export default function App() {
     jogs: jogsReducer,
     intervals: intervalsReducer
   });
-  const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+  const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
 
   init()
     .then(() => {
