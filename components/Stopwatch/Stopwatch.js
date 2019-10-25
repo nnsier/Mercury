@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 import * as JogActions from '../../store/actions/jog-actions';
 
 const Stopwatch = () => {
+    [completed, setCompleted] = useState(false);
     [status, setStatus] = useState(false);
     [runningTime, setRunningTime] = useState(0);
     [locations, setLocations] = useState([]);
@@ -13,10 +14,7 @@ const Stopwatch = () => {
     [distanceInterval, setDistanceInterval] = useState(null);
     const dispatch = useDispatch();
 
-    const stuff = useSelector(state => state.jogs.id);
-    
-
-    
+    const stuff = useSelector(state => state.jogs);
 
     const getLocation = async () => {
         let newLocation = await Location.getCurrentPositionAsync();
@@ -41,22 +39,23 @@ const Stopwatch = () => {
         return Math.abs(coords2.latitude - coords1.latitude) + Math.abs(coords2.longitude - coords1.longitude);
     }
 
-    handleCompletion = async () => {
-        if(locations[0] === undefined){
+    handleCompletion = () => {
+        if(completed){
             console.log('entered here');
             return
         }
-        console.log(locations);
         const firstLocation = locations[0];
         const lastLocation = locations[locations.length-1];
         const distance = calculateDistance(firstLocation, lastLocation);
-        dispatch(JogActions.addJog({runningTime}, Date.now(), distance));
+        console.log(`this is distance: ${distance}`)
+        console.log(`this is runningTime: ${runningTime}`)
+        
+        const date = Date.now();
+        console.log(`this is date ${date}`)
+        dispatch(JogActions.addJog(runningTime, date, distance, locations));
         clearInterval(timerInterval);
         clearInterval(distanceInterval);
-        setLocations([])
-        console.log(locations);
-        
-        console.log(stuff);
+        setCompleted(true)
     }
 
     handleClick = () => {

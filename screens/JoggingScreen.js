@@ -4,7 +4,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import * as jogsActions from '../store/actions/jog-actions';
-import {insertJog, insertInterval, getJogs, getIntervals, dropTables} from '../helpers/db';
+import {insertJog, insertInterval, getJogs, getIntervals, dropTables, fetchJogs, fetchIntervals} from '../helpers/db';
 
 import HeaderButton from '../components/UI/HeaderButton';
 import Stopwatch from '../components/Stopwatch/Stopwatch';
@@ -17,7 +17,7 @@ const JoggingScreen = props => {
     dispatch(jogsActions.loadJogs())
   }, [dispatch])
   const grabJogs = () => {
-    getJogs().then(result => {console.log(JSON.stringify(result))}).catch(err => {console.log(err)})
+    fetchJogs().then(result => {console.log(JSON.stringify(result))}).catch(err => {console.log(err)})
   }
 
   const addInterval = (latitude, longitude, jogs_reference) => {
@@ -38,6 +38,9 @@ const JoggingScreen = props => {
     <Text>Start a jog</Text>
     <View style={styles.buttonRow}>
       <Stopwatch />
+      <Button title="DROP LEZ TABLES" onPress={dropTables} />
+      <Button title="Get JOgs" onPress={grabJogs} />
+      <Button title="get inters" onPress={grabIntervals} />
     </View>
   </View>
   );

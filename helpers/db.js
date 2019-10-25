@@ -120,12 +120,12 @@ const updateIntervals = () => {
   return promise;
 };
 
-export const insertJog = (distance, duration, date) => {
+export const insertJog = (duration, date, distance) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "INSERT INTO jogs (distance, duration, date) VALUES (?, ?, ?)",
-        [distance, duration, date],
+        "INSERT INTO jogs (duration, date, distance) VALUES (?, ?, ?)",
+        [duration, date, distance],
         (_, result) => {
           resolve(result);
         },
@@ -191,6 +191,24 @@ export const fetchJogs = () => {
   });
   return promise;
 };
+
+export const getIntervals = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM intervals",
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+}
 
 export const fetchIntervals = jogId => {
   const promise = new Promise((resolve, reject) => {

@@ -20,6 +20,7 @@ export const loadIntervals = (jogId) => {
     try {
       const dbResult = await fetchIntervals(jogId);
       console.log(dbResult);
+      console.log(`We're in loadIntervals`)
       dispatch({ type: SET_INTERVALS, intervals: dbResult.rows._array})
     } catch (err) {
       throw err;

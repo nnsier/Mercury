@@ -1,15 +1,19 @@
-import { fetchJogs, insertJog } from '../../helpers/db';
+import { fetchJogs, insertJog, insertInterval } from '../../helpers/db';
 
 export const ADD_JOG = "ADD_JOG";
 export const SET_JOGS = "SET_JOGS";
 
-export const addJog = (duration, date, distance) => {
+export const addJog = (duration, date, distance, locations) => {
   return async dispatch => {
     try {
         const dbResult = await insertJog(duration, date, distance);
-        console.log(dbResult);
-        dispatch({ type: ADD_JOG, jogData: {id: dbResult.insertId, duration, date, distance}})
-        loadJogs();
+        const jogId = dbResult.insertId;
+        console.log(`this is the jogId ${jogId}`);
+        console.log(locations);
+        locations.forEach(location => insertInterval(location.latitude, location.longitude, location.timestamp, jogId))
+        dispatch({ type: ADD_JOG, jogData: {id: jogId, duration, date, distance}})
+        
+        console.log('nothing?')
     } catch (err) {
         throw err
     }
@@ -22,8 +26,12 @@ export const loadJogs = () => {
     return async dispatch => {
         try {
             const dbResult = await fetchJogs();
-            console.log(dbResult);
-            dispatch({ type: SET_JOGS, jogs: dbResult.rows._array })
+            console.log(`We're in loadJogs`);
+            console.log('look how much loadjogs were at')
+            if(dbResult.rows._array.length > 0){
+                dispatch({ type: SET_JOGS, jogs: dbResult.rows._array })
+            }
+            
         } catch (err) {
             throw err;
         }

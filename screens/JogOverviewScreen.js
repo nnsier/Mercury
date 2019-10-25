@@ -15,13 +15,15 @@ import * as jogsActions from "../store/actions/jog-actions";
 import HeaderButton from "../components/UI/HeaderButton";
 
 const JogOverviewScreen = props => {
-  const jogs = useSelector(state => state.jogs.jogs);
-  console.log(jogs);
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(jogsActions.loadJogs());
   }, [dispatch]);
+
+  const jogs = useSelector(state => state.jogs.jogs);
+  console.log(jogs);
 
   return (
     <FlatList
