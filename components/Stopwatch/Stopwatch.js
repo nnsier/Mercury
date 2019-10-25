@@ -12,6 +12,10 @@ const Stopwatch = () => {
     [timerInterval, setTimerInterval] = useState(null);
     [distanceInterval, setDistanceInterval] = useState(null);
     const dispatch = useDispatch();
+
+    const stuff = useSelector(state => state.jogs.id);
+    
+
     
 
     const getLocation = async () => {
@@ -31,6 +35,28 @@ const Stopwatch = () => {
             console.log(runningTime);
             getLocation()
         }, 5000))
+    }
+
+    calculateDistance = (coords1, coords2) => {
+        return Math.abs(coords2.latitude - coords1.latitude) + Math.abs(coords2.longitude - coords1.longitude);
+    }
+
+    handleCompletion = async () => {
+        if(locations[0] === undefined){
+            console.log('entered here');
+            return
+        }
+        console.log(locations);
+        const firstLocation = locations[0];
+        const lastLocation = locations[locations.length-1];
+        const distance = calculateDistance(firstLocation, lastLocation);
+        dispatch(JogActions.addJog({runningTime}, Date.now(), distance));
+        clearInterval(timerInterval);
+        clearInterval(distanceInterval);
+        setLocations([])
+        console.log(locations);
+        
+        console.log(stuff);
     }
 
     handleClick = () => {
@@ -72,7 +98,7 @@ const Stopwatch = () => {
                 ? <Button title="Start" onPress={handleClick}/>
                 : <Button title="Pause" onPress={handleClick}/>
                 }
-                <Button title="Complete" onPress={()=> {dispatch(JogActions.addJog(12, Date.now(), 1))}}/>
+                <Button title="Complete" onPress={handleCompletion}/>
             </View>
         </View>
     )

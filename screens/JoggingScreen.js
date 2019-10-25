@@ -37,8 +37,7 @@ const JoggingScreen = props => {
     <View style={styles.screen}>
     <Text>Start a jog</Text>
     <View style={styles.buttonRow}>
-              <Stopwatch />
-
+      <Stopwatch />
     </View>
   </View>
   );
