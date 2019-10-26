@@ -15,7 +15,6 @@ import * as jogsActions from "../store/actions/jog-actions";
 import HeaderButton from "../components/UI/HeaderButton";
 
 const JogOverviewScreen = props => {
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,22 +29,25 @@ const JogOverviewScreen = props => {
       data={jogs}
       keyExtractor={item => item.id.toString()}
       renderItem={itemData => (
-      <JogItem
-        onSelect={()=> {
-          props.navigation.navigate('JogDetail', {
-            jogTitle: itemData.item.id.toString(),
-            jogId: itemData.item.id.toString()
-          })
-        }}
-      />)
-    }
+        <JogItem
+          distance={itemData.item.distance}
+          date={itemData.item.date}
+          duration={itemData.item.duration}
+          onSelect={() => {
+            props.navigation.navigate("JogDetail", {
+              jogTitle: itemData.item.id.toString(),
+              jogId: itemData.item.id.toString()
+            });
+          }}
+        />
+      )}
     />
   );
 };
 
 JogOverviewScreen.navigationOptions = navData => {
   return {
-    headerTitle: `Look how far we've gone`
+    headerTitle: `how far we've gone`
   };
 };
 

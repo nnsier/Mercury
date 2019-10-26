@@ -10,6 +10,7 @@ const JogDetailScreen = props => {
     //const selectedJog = useSelector(state => state.jogs.jogs.find(jog.id === jogId));
     //gotta create models for that to work, I think.
     // console.log(selectedJog);
+    console.log('did this work?')
     console.log(intervals);
     const dispatch = useDispatch();
 
