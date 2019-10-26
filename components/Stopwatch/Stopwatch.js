@@ -14,6 +14,15 @@ const Stopwatch = () => {
     [distanceInterval, setDistanceInterval] = useState(null);
     const dispatch = useDispatch();
 
+    const handleReset = () => {
+        setCompleted(false);
+        setStatus(false);
+        setRunningTime(0);
+        setLocations([]);
+        clearInterval(timerInterval);
+        clearInterval(distanceInterval);
+    }
+
     const stuff = useSelector(state => state.jogs);
 
     const getLocation = async () => {
@@ -101,6 +110,7 @@ const Stopwatch = () => {
                 : <Button title="Pause" onPress={handleClick}/>
                 }
                 <Button title="Complete" onPress={handleCompletion}/>
+                <Button title="Clear" onPress={handleReset} />
             </View>
         </View>
     )
