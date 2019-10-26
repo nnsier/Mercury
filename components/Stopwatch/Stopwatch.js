@@ -26,6 +26,7 @@ const Stopwatch = () => {
 
     const startTimer = () => {
         const startTime = Date.now() - runningTime;
+        getLocation();
         setTimerInterval(setInterval(() => {
             setRunningTime(Date.now() - startTime);
         }))
@@ -39,11 +40,13 @@ const Stopwatch = () => {
         return Math.abs(coords2.latitude - coords1.latitude) + Math.abs(coords2.longitude - coords1.longitude);
     }
 
-    handleCompletion = () => {
+    handleCompletion = async () => {
         if(completed){
             console.log('entered here');
             return
         }
+        await getLocation();
+        console.log(`our locations length ${locations.length}`);
         const firstLocation = locations[0];
         const lastLocation = locations[locations.length-1];
         const distance = calculateDistance(firstLocation, lastLocation);
