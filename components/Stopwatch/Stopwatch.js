@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import {calculateDistance} from '../../helpers/distance';
 import * as Location from 'expo-location';
 
 import * as JogActions from '../../store/actions/jog-actions';
@@ -45,10 +46,6 @@ const Stopwatch = () => {
         }, 5000))
     }
 
-    calculateDistance = (coords1, coords2) => {
-        return Math.abs(coords2.latitude - coords1.latitude) + Math.abs(coords2.longitude - coords1.longitude);
-    }
-
     handleCompletion = async () => {
         if(completed){
             console.log('entered here');
@@ -59,7 +56,7 @@ const Stopwatch = () => {
         const firstLocation = locations[0];
         const lastLocation = locations[locations.length-1];
         const distance = calculateDistance(firstLocation, lastLocation);
-        console.log(`this is distance: ${distance}`)
+        console.log(`this is distance in meters: ${distance}`)
         console.log(`this is runningTime: ${runningTime}`)
         
         const date = Date.now();
