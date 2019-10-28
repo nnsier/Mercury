@@ -10,13 +10,17 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_INTERVAL:
         // look at jogReducers, will probably have to change action.id into action.intervaldata.Id or something
-        const newInterval = new Interval(action.id, action.latitude, action.longitude, action.timestamp, action.jogs_reference);
+
+        const newInterval = new Interval(action.intervalData.id, action.intervalData.latitude, action.intervalData.longitude, action.intervalData.timestamp, action.intervalData.jogs_reference);
+        console.log(newInterval);
         return {
             intervals: state.intervals.concat(newInterval)
         }
     case SET_INTERVALS:
       return {
-        intervals: action.intervals
+        intervals: action.intervals.map(
+          int => new Interval(int.id, int.latitude, int.longitude, int.timestamp, int.jogs_reference)
+        )
       };
     default:
       return state;

@@ -1,16 +1,18 @@
-import { fetchIntervals } from '../../helpers/db';
+import { fetchIntervals, insertInterval } from '../../helpers/db';
 
 export const ADD_INTERVAL = "ADD_INTERVAL";
 export const SET_INTERVALS = "SET_INTERVALS"
 
 export const addInterval = (latitude, longitude, timestamp, jogs_referenceId) => {
-  return {
-    type: ADD_INTERVAL,
-    intervalData: {
-      latitude,
-      longitude,
-      timestamp,
-      jogs_referenceId
+  return async dispatch => {
+    try {
+      console.log(`we're here at least`)
+      const dbResult = await insertInterval(latitude, longitude, timestamp, jogs_referenceId)
+      const intervalId = dbResult.insertId;
+      console.log(`this is the intervalId ${intervalId}`);
+      dispatch({ type: ADD_INTERVAL, intervalData: {id: intervalId, latitude, longitude, timestamp, jogs_referenceId}})
+    } catch(err) {
+      throw err
     }
   };
 };
