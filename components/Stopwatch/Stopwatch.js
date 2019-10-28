@@ -52,7 +52,6 @@ const Stopwatch = () => {
             return
         }
         await getLocation();
-        console.log(`our locations length ${locations.length}`);
         const firstLocation = locations[0];
         const lastLocation = locations[locations.length-1];
         const distance = calculateDistance(firstLocation, lastLocation);

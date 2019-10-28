@@ -52,7 +52,7 @@ export const initIntervalsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_reference INTEGER, FOREIGN KEY (jogs_reference) REFERENCES jogs(id));",
+        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_referenceId INTEGER, FOREIGN KEY (jogs_referenceId) REFERENCES jogs(id));",
         [],
         () => {
           resolve();
@@ -106,7 +106,7 @@ const updateIntervals = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "UPDATE intervals SET jogs_reference = NULL",
+        "UPDATE intervals SET jogs_referenceId = NULL",
         [],
         (_, result) => {
           resolve(result);
@@ -138,12 +138,12 @@ export const insertJog = (duration, date, distance) => {
   return promise;
 };
 
-export const insertInterval = (latitude, longitude, timestamp, jogs_reference) => {
+export const insertInterval = (latitude, longitude, timestamp, jogs_referenceId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "INSERT INTO intervals (latitude, longitude, timestamp, jogs_reference) VALUES (?, ?, ?, ?)",
-        [latitude, longitude, timestamp, jogs_reference],
+        "INSERT INTO intervals (latitude, longitude, timestamp, jogs_referenceId) VALUES (?, ?, ?, ?)",
+        [latitude, longitude, timestamp, jogs_referenceId],
         (_, result) => {
           resolve(result);
         },
@@ -160,7 +160,7 @@ export const getJogs = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_reference = jogs.id",
+        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_referenceId = jogs.id",
         [],
         (_, result) => {
           resolve(result);
@@ -192,7 +192,7 @@ export const fetchJogs = () => {
   return promise;
 };
 
-export const getIntervals = () => {
+export const fetchIntervals = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -210,12 +210,12 @@ export const getIntervals = () => {
   return promise;
 }
 
-export const fetchIntervals = jogId => {
+export const getIntervals = jogId => {
   const promise = new Promise((resolve, reject) => {
     console.log(jogId);
     db.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_reference = ?",
+        "SELECT * FROM jogs INNER JOIN intervals ON intervals.jogs_referenceId = ?",
         [jogId],
         (_, result) => {
           resolve(result);

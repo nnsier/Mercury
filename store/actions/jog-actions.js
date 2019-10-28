@@ -10,7 +10,8 @@ export const addJog = (duration, date, distance, locations) => {
     try {
         const dbResult = await insertJog(duration, date, distance);
         const jogId = dbResult.insertId;
-        locations.forEach(location => dispatch(intervalActions.addInterval(location.latitude, location.longitude, location.timestamp, jogId)))
+        console.log(jogId);
+        await locations.forEach(location => dispatch(intervalActions.addInterval(location.latitude, location.longitude, location.timestamp, dbResult.insertId)))
         dispatch({ type: ADD_JOG, jogData: {id: jogId, duration, date, distance}})
     } catch (err) {
         throw err

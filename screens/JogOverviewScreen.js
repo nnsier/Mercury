@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import JogItem from "../components/Jog/JogItem";
 import * as jogsActions from "../store/actions/jog-actions";
+import * as intervalsActions from '../store/actions/interval-actions';
 import HeaderButton from "../components/UI/HeaderButton";
 
 const JogOverviewScreen = props => {
@@ -20,6 +21,9 @@ const JogOverviewScreen = props => {
   useEffect(() => {
     dispatch(jogsActions.loadJogs());
   }, [dispatch]);
+  useEffect(() => {
+    dispatch(intervalsActions.loadIntervals())
+  },[dispatch])
 
   const jogs = useSelector(state => state.jogs.jogs);
   console.log(jogs);
