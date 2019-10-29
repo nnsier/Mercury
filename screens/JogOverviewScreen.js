@@ -7,6 +7,7 @@ import {
   Platform,
   FlatList
 } from "react-native";
+import { ScreenOrientation } from 'expo'
 // import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from "react-redux";
 
@@ -17,7 +18,9 @@ import HeaderButton from "../components/UI/HeaderButton";
 
 const JogOverviewScreen = props => {
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+  })
   useEffect(() => {
     dispatch(jogsActions.loadJogs());
   }, [dispatch]);
