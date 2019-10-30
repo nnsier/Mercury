@@ -28,6 +28,7 @@ const Stopwatch = () => {
 
     const getLocation = async () => {
         let newLocation = await Location.getCurrentPositionAsync();
+        console.log(newLocation);
         let {timestamp} = newLocation;
         let {latitude, longitude, speed} = newLocation.coords;
         setLocations([...locations, {latitude, longitude, speed, timestamp}])
@@ -43,7 +44,7 @@ const Stopwatch = () => {
         setDistanceInterval(distanceCheck = setInterval(()=> {
             console.log(runningTime);
             getLocation()
-        }, 5000))
+        }, 10000))
     }
 
     handleCompletion = async () => {

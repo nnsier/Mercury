@@ -1,7 +1,7 @@
 class Interval {
   constructor(id, latitude, longitude, timestamp, jogs_referenceId) {
     this.id = id;
-    this.latitiude = latitude;
+    this.latitude = latitude;
     this.longitude = longitude;
     this.timestamp = timestamp;
     this.jogs_referenceId = jogs_referenceId;

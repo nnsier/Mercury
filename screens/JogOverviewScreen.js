@@ -19,8 +19,12 @@ import HeaderButton from "../components/UI/HeaderButton";
 const JogOverviewScreen = props => {
   const dispatch = useDispatch();
   useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
   })
+  const lockOrientation = () => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+  }
+  lockOrientation();
   useEffect(() => {
     dispatch(jogsActions.loadJogs());
   }, [dispatch]);
@@ -32,6 +36,7 @@ const JogOverviewScreen = props => {
   console.log(jogs);
 
   return (
+    
     <FlatList
       data={jogs}
       keyExtractor={item => item.id.toString()}

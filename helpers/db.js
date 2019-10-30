@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("mercury.db");
+const db = SQLite.openDatabase("mercuri.db");
 
 export const init = async () => {
   try {
@@ -52,7 +52,7 @@ export const initIntervalsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_referenceId INTEGER, FOREIGN KEY (jogs_referenceId) REFERENCES jogs(id));",
+        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_referenceId INTEGER NOT NULL, FOREIGN KEY (jogs_referenceId) REFERENCES jogs(id));",
         [],
         () => {
           resolve();
