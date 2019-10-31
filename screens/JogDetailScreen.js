@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Platform } from "react-native";
 import { ScreenOrientation } from "expo";
 import { useSelector, useDispatch } from "react-redux";
 import { LineChart, Grid, YAxis, XAxis } from "react-native-svg-charts";
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import {calculateDistance} from '../helpers/distance';
-
+import {timestampTrimmed} from '../helpers/time';
 import Interval from "../models/interval";
-
 import * as intervalsActions from "../store/actions/interval-actions";
+import HeaderButton from '../components/UI/HeaderButton';
 
 const useScreenDimensions = () => {
   const [screenData, setScreenData] = useState(Dimensions.get('screen'));
@@ -29,28 +30,30 @@ const useScreenDimensions = () => {
 }
 
 const JogDetailScreen = props => {
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-  });
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    
+  // }
+  // return function cleanup() {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
+  // }
+  // );
   const screenData = useScreenDimensions();
-  console.log(screenData);
   const switchToLandscape = () => {
     ScreenOrientation.allowAsync(ScreenOrientation.LANDSCAPE);
   };
   const jogId = props.navigation.getParam("jogId");
-  console.log(`my jogId = ${jogId}`);
 
   const intervals = useSelector(state => state.intervals.intervals);
   const filtered = intervals.filter(
     interval => interval.jogs_referenceId == jogId
   );
-  console.log(filtered);
-  // console.log(intervals);
-  console.log("did this work?");
-  // console.log(intervals);
-  const dispatch = useDispatch();
+  
+  
 
   const grabSpeed = (intervals) => {
+    
     const grabbedSpeeds = [];
     for(let i = 0; i < intervals.length-1; i++){
         grabbedSpeeds.push(calculateDistance(intervals[i], intervals[i+1]))
@@ -64,17 +67,23 @@ const JogDetailScreen = props => {
 
   const speeds = grabSpeed(filtered);
 
-  const grabbedTimes = filtered.map(intervals => intervals.timestamp);
-  // const grabTimes = (intervals) => {
-  //   console.log(intervals);
-  //   const grabbedTimes = [];
-  //   for(let i = 0; i <intervals.length; i++){
-  //     grabbedTimes.push(intervals[i].timestamp)
-  //   }
-  //   return grabbedTimes;
-  // }
+  
+ 
+  const calculateTimeDifference = (initialTimeStamp, nextTime) => {
+    return nextTime - initialTimeStamp;
+  }
 
-  console.log(grabbedTimes);
+  const grabTimes = (intervals) => {
+    let startingTime = intervals[0].timestamp;
+    console.log(intervals);
+    const grabbedTimes = [];
+    for(let i = 0; i <intervals.length; i++){
+      grabbedTimes.push(timestampTrimmed(intervals[i].timestamp - startingTime));
+    }
+    return grabbedTimes;
+  }
+
+  console.log(grabTimes(filtered));
 
   // useEffect(()=> {
   //     dispatch(intervalsActions.loadIntervals(jogId));
@@ -92,7 +101,9 @@ const JogDetailScreen = props => {
   ];
 
   // const speeds = data.map(item => item.speed);
-  const time = data.map(item => item.time);
+
+  const time = data.map(item => 3);
+  // const time = data.map(item => item.time);
   const verticalContentInset = { top: 10, bottom: 10 };
   const xAxisHeight = 30;
   return (
@@ -140,7 +151,18 @@ const JogDetailScreen = props => {
 
 JogDetailScreen.navigationOptions = navData => {
   return {
-    headerTitle: navData.navigation.getParam("jogTitle")
+    headerTitle: navData.navigation.getParam("jogTitle"),
+    headerLeft: (<HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title='Jogging Overview'
+        iconName={Platform.OS === 'android' ? 'md-flash' : 'ios-flash'}
+        onPress={() => {
+          ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT)
+          navData.navigation.goBack()
+        }}
+
+      />
+    </HeaderButtons>)
   };
 };
 

@@ -10,6 +10,7 @@ import {
 import { ScreenOrientation } from 'expo'
 // import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from "react-redux";
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import JogItem from "../components/Jog/JogItem";
 import * as jogsActions from "../store/actions/jog-actions";
@@ -18,13 +19,13 @@ import HeaderButton from "../components/UI/HeaderButton";
 
 const JogOverviewScreen = props => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-  })
-  const lockOrientation = () => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-  }
-  lockOrientation();
+  // useEffect(() => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+  // })
+  // const lockOrientation = () => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+  // }
+  // lockOrientation();
   useEffect(() => {
     dispatch(jogsActions.loadJogs());
   }, [dispatch]);
@@ -46,10 +47,12 @@ const JogOverviewScreen = props => {
           date={itemData.item.date}
           duration={itemData.item.duration}
           onSelect={() => {
-            props.navigation.navigate("JogDetail", {
+            ScreenOrientation.lockAsync(ScreenOrientation.Orientation.LANDSCAPE)
+            setTimeout(()=>{props.navigation.navigate("JogDetail", {
               jogTitle: itemData.item.id.toString(),
               jogId: itemData.item.id.toString()
-            });
+            });},50)
+            
           }}
         />
       )}
@@ -59,7 +62,18 @@ const JogOverviewScreen = props => {
 
 JogOverviewScreen.navigationOptions = navData => {
   return {
-    headerTitle: `how far we've gone`
+    headerLeft: (<HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title='Jogging Overview'
+        iconName={Platform.OS === 'android' ? 'md-flash' : 'ios-flash'}
+        onPress={() => {
+          ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT)
+          navData.navigation.goBack()
+        }}
+
+      />
+    </HeaderButtons>),
+    headerTitle: `Jogs`
   };
 };
 

@@ -5,6 +5,8 @@ import {calculateDistance} from '../../helpers/distance';
 import * as Location from 'expo-location';
 
 import * as JogActions from '../../store/actions/jog-actions';
+import {timeToString} from '../../helpers/time';
+import { AuthSession } from 'expo';
 
 const Stopwatch = () => {
     [completed, setCompleted] = useState(false);
@@ -87,20 +89,12 @@ const Stopwatch = () => {
         }
     },[]);
 
-    const rawHours = Math.floor(
-      (runningTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const rawMinutes = Math.floor((runningTime % (1000 * 60 * 60)) / (1000 * 60));
-    const rawSeconds = Math.floor((runningTime % (1000 * 60)) / 1000);
-    const rawMilliseconds = runningTime % 1000;
-    const hours = (rawHours < 10) ? `0${rawHours}` : rawHours;
-    const minutes = (rawMinutes < 10) ? `0${rawMinutes}` : rawMinutes;
-    const seconds = (rawSeconds < 10) ? `0${rawSeconds}`: rawSeconds;
-    const milliseconds = (rawMilliseconds < 10) ? `00${rawMilliseconds}` : ((rawMilliseconds < 100) ? `0${rawMilliseconds}` : rawMilliseconds);
     
+    const timeString = timeToString(runningTime);
+
     return(
-        <View>
-            <Text style={styles.clock}>{hours}:{minutes}:{seconds}:{milliseconds}</Text>
+        <View style={styles.container}>
+            <Text style={styles.clock}>{timeString}</Text>
             <View style={styles.buttonRow}>
                 {!status 
                 ? <Button title="Start" onPress={handleClick}/>
@@ -114,12 +108,18 @@ const Stopwatch = () => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        // marginHorizontal: 20,
+        alignItems: 'center'
+    },
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     clock: {
-        fontSize: 24,
+        fontSize: 36,
+        width: 250
+ 
     }
 })
 

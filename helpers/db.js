@@ -22,8 +22,9 @@ export const dropTables = async () => {
       () => console.log("Foreign keys turned off")
     );
     await dropJogsTable();
-    await updateIntervals();
     await dropIntervalsTable();
+    // await updateIntervals();
+    
     await init();
   } catch (error) {
     console.log(error);
@@ -52,7 +53,7 @@ export const initIntervalsTable = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_referenceId INTEGER NOT NULL, FOREIGN KEY (jogs_referenceId) REFERENCES jogs(id));",
+        "CREATE TABLE IF NOT EXISTS intervals (id INTEGER PRIMARY KEY NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL, timestamp INTEGER NOT NULL, jogs_referenceId INTEGER, FOREIGN KEY (jogs_referenceId) REFERENCES jogs(id));",
         [],
         () => {
           resolve();

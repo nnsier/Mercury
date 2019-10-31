@@ -14,12 +14,12 @@ import Stopwatch from '../components/Stopwatch/Stopwatch';
 const JoggingScreen = props => {
   const dispatch = useDispatch();
   useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
   })
-  const lockOrientation = () => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
-  }
-  lockOrientation();
+  // const lockOrientation = () => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+  // }
+  // lockOrientation();
   
   useEffect(()=> {
     dispatch(jogsActions.loadJogs())
@@ -80,8 +80,9 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   buttonRow: {
+    width: '100%',
     // flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-around'
   }
 })
 
