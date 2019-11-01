@@ -52,60 +52,62 @@ const JogDetailScreen = props => {
   
   
 
-  const grabSpeed = (intervals) => {
+  const grabDistance = (intervals) => {
     
-    const grabbedSpeeds = [];
+    const grabbedDistances = [];
     for(let i = 0; i < intervals.length-1; i++){
-        grabbedSpeeds.push(calculateDistance(intervals[i], intervals[i+1]))
+        grabbedDistances.push(calculateDistance(intervals[i], intervals[i+1]))
 
     }
-    console.log(grabbedSpeeds);
-    return grabbedSpeeds;
+    console.log(grabbedDistances);
+    return grabbedDistances;
   }
 
-  // grabSpeed(filtered)
+  // grabDistance(filtered)
 
-  const speeds = grabSpeed(filtered);
-
-  
- 
-  const calculateTimeDifference = (initialTimeStamp, nextTime) => {
-    return nextTime - initialTimeStamp;
-  }
+  const distances = grabDistance(filtered);
+  console.log(`Check out dem distances: ${distances}`)
 
   const grabTimes = (intervals) => {
     let startingTime = intervals[0].timestamp;
     console.log(intervals);
     const grabbedTimes = [];
-    for(let i = 0; i <intervals.length; i++){
-      grabbedTimes.push(timestampTrimmed(intervals[i].timestamp - startingTime));
+    for(let i = 1; i <intervals.length; i++){
+      grabbedTimes.push(intervals[i].timestamp - startingTime);
     }
     return grabbedTimes;
   }
 
-  console.log(grabTimes(filtered));
+  const grabbedTimes = grabTimes(filtered);
 
-  // useEffect(()=> {
-  //     dispatch(intervalsActions.loadIntervals(jogId));
-  // }, [dispatch, jogId])
-  //this is where we will fetch all intervals for a jog id
-  const data = [
-    { time: 1, speed: 2 },
-    { time: 2, speed: 1 },
-    { time: 3, speed: 1 },
-    { time: 4, speed: 2 },
-    { time: 5, speed: 3 },
-    { time: 6, speed: 1 },
-    { time: 7, speed: 5 },
-    { time: 8, speed: 2 }
-  ];
+  const hours = grabbedTimes.map(time => timestampTrimmed(time))
 
-  // const speeds = data.map(item => item.speed);
+  const createData = (hours, distances, grabbedTimes) => {
+    //this is where I create a new object by iterating through
+    let data = [];
+    for(let i = 0; i < distances.length; i++) {
+      let speed = distances[i]/grabbedTimes[i]
+      data.push({time: hours[i], speed })
+    }
+    return data;
+  }
 
-  const time = data.map(item => 3);
-  // const time = data.map(item => item.time);
+
+
+  
+
+  
+
+  const newData = createData(hours, distances, grabbedTimes);
+  console.log(newData);
+  console.log("------------------------------");
+  console.log(newData.map(data => data.time))
+  console.log(newData.map(data => data.speed))
+
+
   const verticalContentInset = { top: 10, bottom: 10 };
   const xAxisHeight = 30;
+  const times = newData.map(data => data.time)
   return (
     <View
       style={{
@@ -114,8 +116,8 @@ const JogDetailScreen = props => {
         flexDirection: "row"
       }}
     >
-      <YAxis
-        data={speeds}
+      {/* <YAxis
+        data={()=> {newData.map(data => data.speed)}}
         style={{ marginBottom: xAxisHeight }}
         contentInset={verticalContentInset}
         svg={{
@@ -124,11 +126,11 @@ const JogDetailScreen = props => {
         }}
         numberOfTicks={7}
         formatLabel={value => `${value}mph`}
-      />
+      /> */}
       <View style={{ flex: 1, marginLeft: 10 }}>
         <LineChart
           style={{ flex: 1 }}
-          data={data}
+          data={newData}
           svg={{ stroke: "rgb(134, 65, 244)" }}
           contentInset={verticalContentInset}
           yAccessor={({ item }) => item.speed}
@@ -139,7 +141,7 @@ const JogDetailScreen = props => {
 
         <XAxis
           style={{ marginHorizontal: -10, height: xAxisHeight }}
-          data={time}
+          data={times}
           formatLabel={(value, index) => value}
           contentInset={{ left: 10, right: 10 }}
           svg={{ fontSize: 10, fill: "black" }}

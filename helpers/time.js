@@ -22,5 +22,6 @@ export const timestampTrimmed = (runningTime) => {
     const milliseconds = runningTime % 1000;
     console.log(`${milliseconds}ms`);
     const hours = milliseconds/(1000*60*60);
+    console.log(hours);
     return hours;
 }

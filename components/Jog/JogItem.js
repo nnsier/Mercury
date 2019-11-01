@@ -8,7 +8,6 @@ const JogItem = props => {
 
   const duration = timeToString(props.duration);
 
-  console.log(date);
   return (
     <TouchableOpacity onPress={props.onSelect} style={styles.jogItem}>
       <View>
